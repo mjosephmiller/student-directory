@@ -25,11 +25,9 @@ end
 
 def print(students)
 @selected_students = []
-  puts 'Please enter the initial of the student you would like to print:'
-  @initial = gets.chomp
 
-  students.each do |student|
-    if student[:name][0] == @initial
+  students.map do |student|
+    if student[:name].length < 12
       @selected_students << student
       @selected_students.each  do |sel_student|
         puts "#{sel_student[:name]}, (#{sel_student[:cohort]} cohort)"
@@ -39,7 +37,7 @@ def print(students)
 end
 
 def print_footer(students)
-  puts "Looks like we have #{@selected_students.size} great student(s) that share(s) the initial #{@initial}"
+  puts "Looks like we have #{@selected_students.size} student(s) that have less than 12 characters in their names"
 end
 
 students = input_students
