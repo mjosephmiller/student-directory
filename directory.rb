@@ -22,8 +22,10 @@ def print_header
 end
 
 def print(students)
-  students.each_with_index do |student, index|
-    puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
+  i = 0
+  while students.length > i do
+    puts "#{i+1}. #{students[i][:name]} (#{students[i][:cohort]} cohort)"
+    i += 1
   end
 end
 
@@ -32,6 +34,5 @@ def print_footer(students)
 end
 
 students = input_students
-print_header
 print(students)
 print_footer(students)
