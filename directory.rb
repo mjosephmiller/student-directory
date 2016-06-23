@@ -1,16 +1,26 @@
+require 'date'
+
 def input_students
   puts "Please enter the names of the students"
   puts "To finsh, just hit return twice"
 
   students = []
 
-  name = gets.chomp
+  name = gets.chomp.split(/ |\_/).map(&:capitalize).join(" ")
 
   while !name.empty? do
-    students << {name: name, cohort: :november}
+    puts "Using (dd/mm/yyyy) format, what is #{name}'s date of birth?"
+    dob = gets.chomp
+    puts "What is their country of birth?"
+    country = gets.chomp.split(/ |\_/).map(&:capitalize).join(" ")
+    puts "What is their favourite hobby?"
+    hobby = gets.chomp.capitalize
+    students << {name: name, dob: dob, country: country, hobby: hobby, cohort: :November}
     puts "Now we have #{students.count} students"
+    puts ""
+    puts "Next student?"
 
-  name = gets.chomp
+  name = gets.chomp.split(/ |\_/).map(&:capitalize).join(" ")
   end
 
   students
@@ -24,7 +34,7 @@ end
 def print(students)
   i = 0
   while students.length > i do
-    puts "#{i+1}. #{students[i][:name]} (#{students[i][:cohort]} cohort)"
+    puts "#{i+1}. #{students[i][:name]} - DOB: #{students[i][:dob]} - Country of birth: #{students[i][:country]} - Favourite Hobby: #{students[i][:hobby]} - Cohort: (#{students[i][:cohort]})"
     i += 1
   end
 end
