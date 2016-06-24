@@ -27,15 +27,16 @@ def input_students
 end
 
 def print_header
-  puts "The students of Villains Academy"
-  puts "-------------"
+  puts "The students of Villains Academy".center(100)
+  puts "-------------".center(100)
 end
 
 def print(students)
   i = 0
   while students.length > i do
-    puts "#{i+1}. #{students[i][:name]} - DOB: #{students[i][:dob]} - Country of birth: #{students[i][:country]} - Favourite Hobby: #{students[i][:hobby]} - Cohort: (#{students[i][:cohort]})"
+    puts "#{i+1}. #{students[i][:name]}\n - DOB: #{students[i][:dob]}\n - Country of birth: #{students[i][:country]}\n - Favourite Hobby: #{students[i][:hobby]}\n - Cohort: (#{students[i][:cohort]})"
     i += 1
+    puts ""
   end
 end
 
