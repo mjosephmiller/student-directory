@@ -19,28 +19,27 @@ def input_students
 
   students = []
 
-  name = gets.chomp.split(/ |\_/).map(&:capitalize).join(" ")
-
+  name = gets.strip.split(/ |\_/).map(&:capitalize).join(" ")
   while !name.empty? do
     puts "Which cohort is #{name} in?"
-    cohort = gets.chomp.downcase.to_sym
+    cohort = gets.strip.downcase.to_sym
       cohort = "November" if cohort.empty?
       until @months.include?(cohort)
         puts "Please enter a valid month"
-        cohort = gets.chomp.downcase.to_sym
+        cohort = gets.strip.downcase.to_sym
       end
     puts "Using (dd/mm/yyyy) format, what is #{name}'s date of birth?"
-    dob = gets.chomp
+    dob = gets.strip
     puts "What is their country of birth?"
-    country = gets.chomp.split(/ |\_/).map(&:capitalize).join(" ")
+    country = gets.strip.split(/ |\_/).map(&:capitalize).join(" ")
     puts "What is their favourite hobby?"
-    hobby = gets.chomp.capitalize
+    hobby = gets.strip.capitalize
     students << {name: name, dob: dob, country: country, hobby: hobby, cohort: {month: cohort, num: @months[cohort]}}
     puts "Now we have #{students.count} students"
     puts ""
     puts "Next student?"
 
-  name = gets.chomp.split(/ |\_/).map(&:capitalize).join(" ")
+  name = gets.strip.split(/ |\_/).map(&:capitalize).join(" ")
   end
 
   students
