@@ -1,6 +1,17 @@
 require 'date'
 
-@months = [:january, :february, :march, :april, :may, :june, :july, :august, :september, :october, :november, :december]
+@months = {january: 1,
+  february: 2,
+  march: 3,
+  april: 4,
+  may: 5,
+  june: 6,
+  july: 7,
+  august: 8,
+  september: 9,
+  october: 10,
+  november: 11,
+  december: 12}
 
 def input_students
   puts "Please enter the names of the students"
@@ -24,7 +35,7 @@ def input_students
     country = gets.chomp.split(/ |\_/).map(&:capitalize).join(" ")
     puts "What is their favourite hobby?"
     hobby = gets.chomp.capitalize
-    students << {name: name, dob: dob, country: country, hobby: hobby, cohort: cohort}
+    students << {name: name, dob: dob, country: country, hobby: hobby, cohort: {month: cohort, num: @months[cohort]}}
     puts "Now we have #{students.count} students"
     puts ""
     puts "Next student?"
@@ -43,11 +54,13 @@ end
 def print(students)
   i = 0
   while students.length > i do
-    puts "#{i+1}. #{students[i][:name]}\n - DOB: #{students[i][:dob]}\n - Country of birth: #{students[i][:country]}\n - Favourite Hobby: #{students[i][:hobby]}\n - Cohort: (#{students[i][:cohort]})"
+    students.sort_by!{|student| student[:cohort][:num]}
+    puts "#{i+1}. #{students[i][:name]}\n - DOB: #{students[i][:dob]}\n - Country of birth: #{students[i][:country]}\n - Favourite Hobby: #{students[i][:hobby]}\n - Cohort: #{students[i][:cohort][:month]}"
     i += 1
     puts ""
   end
 end
+
 
 def print_footer(students)
   puts "Overall, we have #{students.count} great students"
