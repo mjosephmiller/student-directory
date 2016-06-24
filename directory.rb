@@ -20,6 +20,10 @@ def input_students
   students = []
 
   name = gets.strip.split(/ |\_/).map(&:capitalize).join(" ")
+  if name.empty?
+    puts  "The student directory is empty and this program has closed."
+    exit
+  end
   while !name.empty? do
     puts "Which cohort is #{name} in?"
     cohort = gets.strip.downcase.to_sym
