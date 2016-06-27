@@ -13,7 +13,12 @@ require 'date'
     end
   end
 
-def load_students(filename = "students.csv")
+def set_filename
+  puts "Please enter filename"
+  @filename = STDIN.gets.chomp
+end
+
+def load_students(filename = set_filename)
   file = File.open(filename, "r")
     file.readlines.each do |line|
       name, cohort = line.chomp.split(',')
@@ -25,9 +30,8 @@ end
 
 def save_students
   #open the file for writing
-  file = File.open("students.csv", "w")
+  file = File.open(set_filename, "w")
   #iterate over the array of students
-  p @students
   @students.each do |student|
     student_data = [student[:name], student[:cohort]]
     csv_line = student_data.join(",")
@@ -40,8 +44,8 @@ end
 def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
-  puts "3. Save the list to students.csv"
-  puts "4. Load the list from students.csv"
+  puts "3. Save the list to file"
+  puts "4. Load the list from file"
   puts "9. Exit"
 end
 
@@ -132,7 +136,6 @@ end
 def print_list(students)
   i = 0
   while @students.length > i do
-    @students.sort_by!{|student| student[:cohort]}
     puts "#{i+1}. #{@students[i][:name]}\n - DOB: #{@students[i][:dob]}\n - Country of birth: #{@students[i][:country]}\n - Favourite Hobby: #{@students[i][:hobby]}\n - Cohort: #{@students[i][:cohort]}"
     i += 1
     puts ""
