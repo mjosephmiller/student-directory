@@ -1,28 +1,26 @@
 require 'date'
 @students = []
-@months = {january: 1,
-  february: 2,
-  march: 3,
-  april: 4,
-  may: 5,
-  june: 6,
-  july: 7,
-  august: 8,
-  september: 9,
-  october: 10,
-  november: 11,
-  december: 12}
 
-def load_students
-  file = File.open("students.csv", "r")
-  if File.exists?("students.csv")
-    puts "Loaded file from students.csv"
+  def try_load_students
+    filename = ARGV.first
+    return if filename.nil?
+    if File.exists?(filename)
+      load_students(filename)
+      puts "Loaded #{@students.count} from #{filename}"
+    else
+      puts "Sorry #{filename} doesn't exist."
+      exit
+    end
+  end
+
+def load_students(filename = "students.csv")
+  file = File.open(filename, "r")
     file.readlines.each do |line|
       name, cohort = line.chomp.split(',')
       @students << {name: name, cohort: cohort}
     end
     file.close
-  end
+    puts "students loaded"
 end
 
 def save_students
@@ -31,11 +29,12 @@ def save_students
   #iterate over the array of students
   p @students
   @students.each do |student|
-    student_data = [student[:name], student[:cohort][:month]]
+    student_data = [student[:name], student[:cohort]]
     csv_line = student_data.join(",")
     file.puts csv_line
   end
   file.close
+  puts "students saved!"
 end
 
 def print_menu
@@ -72,7 +71,7 @@ def process(selection)
 def interactive_menu
   loop do
     print_menu
-    process(gets.chomp)
+    process(STDIN.gets.chomp)
   end
 end
 
@@ -80,34 +79,49 @@ def input_students
   puts "Please enter the names of the students"
   puts "To finsh, just hit return twice"
 
-  name = gets.strip.split(/ |\_/).map(&:capitalize).join(" ")
-  if name.empty?
+  @name = STDIN.gets.strip.split(/ |\_/).map(&:capitalize).join(" ")
+  if @name.empty?
     puts  "The student directory is empty and this program has closed."
     exit
   end
-  while !name.empty? do
-    puts "Which cohort is #{name} in?"
-    cohort = gets.strip.downcase.to_sym
-      cohort = "November" if cohort.empty?
-      until @months.include?(cohort)
-        puts "Please enter a valid month"
-        cohort = gets.strip.downcase.to_sym
-      end
-    puts "Using (dd/mm/yyyy) format, what is #{name}'s date of birth?"
-    dob = gets.strip
-    puts "What is their country of birth?"
-    country = gets.strip.split(/ |\_/).map(&:capitalize).join(" ")
-    puts "What is their favourite hobby?"
-    hobby = gets.strip.capitalize
-    @students << {name: name, dob: dob, country: country, hobby: hobby, cohort: {month: cohort, num: @months[cohort]}}
+  while !@name.empty? do
+    cohort = get_cohort
+    dob = get_dob
+    country = get_country
+    hobby = get_hobby
+    @students << {name: @name, dob: dob, country: country, hobby: hobby, cohort: cohort}
     puts "Now we have #{@students.count} students"
     puts ""
     puts "Next student?"
 
-  name = gets.strip.split(/ |\_/).map(&:capitalize).join(" ")
+  @name = STDIN.gets.strip.split(/ |\_/).map(&:capitalize).join(" ")
   end
 
   @students
+end
+
+def get_cohort
+  puts "Which cohort is #{@name} in?"
+  cohort = STDIN.gets.strip.downcase.to_sym
+  return cohort
+end
+
+def get_dob
+  puts "Using (dd/mm/yyyy) format, what is #{@name}'s date of birth?"
+  dob = STDIN.gets.strip
+  return dob
+end
+
+def get_country
+  puts "What is their country of birth?"
+  country = STDIN.gets.strip.split(/ |\_/).map(&:capitalize).join(" ")
+  return country
+end
+
+def get_hobby
+  puts "What is their favourite hobby?"
+  hobby = STDIN.gets.strip.capitalize
+  return hobby
 end
 
 def print_header
@@ -134,4 +148,5 @@ def print_footer(students)
   end
 end
 
+try_load_students
 interactive_menu
