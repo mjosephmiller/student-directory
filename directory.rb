@@ -13,12 +13,25 @@ require 'date'
   november: 11,
   december: 12}
 
+def load_students
+  file = File.open("students.csv", "r")
+  if File.exists?("students.csv")
+    puts "Loaded file from students.csv"
+    file.readlines.each do |line|
+      name, cohort = line.chomp.split(',')
+      @students << {name: name, cohort: cohort}
+    end
+    file.close
+  end
+end
+
 def save_students
   #open the file for writing
   file = File.open("students.csv", "w")
   #iterate over the array of students
+  p @students
   @students.each do |student|
-    student_data = [student[:name], student[:cohort]]
+    student_data = [student[:name], student[:cohort][:month]]
     csv_line = student_data.join(",")
     file.puts csv_line
   end
@@ -29,12 +42,13 @@ def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
   puts "3. Save the list to students.csv"
+  puts "4. Load the list from students.csv"
   puts "9. Exit"
 end
 
 def show_students
   print_header
-  print(@students)
+  print_list(@students)
   print_footer(@students)
 end
 
@@ -46,6 +60,8 @@ def process(selection)
       show_students
     when "3"
       save_students
+    when "4"
+      load_students
     when "9"
       exit # Exit the program
     else
@@ -99,11 +115,11 @@ def print_header
   puts "-------------"
 end
 
-def print(students)
+def print_list(students)
   i = 0
   while @students.length > i do
-    @students.sort_by!{|student| student[:cohort][:num]}
-    puts "#{i+1}. #{@students[i][:name]}\n - DOB: #{@students[i][:dob]}\n - Country of birth: #{@students[i][:country]}\n - Favourite Hobby: #{@students[i][:hobby]}\n - Cohort: #{@students[i][:cohort][:month]}"
+    @students.sort_by!{|student| student[:cohort]}
+    puts "#{i+1}. #{@students[i][:name]}\n - DOB: #{@students[i][:dob]}\n - Country of birth: #{@students[i][:country]}\n - Favourite Hobby: #{@students[i][:hobby]}\n - Cohort: #{@students[i][:cohort]}"
     i += 1
     puts ""
   end
