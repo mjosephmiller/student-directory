@@ -1,4 +1,5 @@
 require 'date'
+require 'csv'
 @students = []
 
   def try_load_students
@@ -19,23 +20,19 @@ def set_filename
 end
 
 def load_students(filename = set_filename)
-  file = File.open(filename, "r") do |file|
-    file.readlines.each do |line|
-      name, cohort = line.chomp.split(',')
-      @students << {name: name, cohort: cohort}
-    end
-    puts "students loaded"
+  CSV.foreach(filename, "r") do |row|
+      name, cohort, country = row
+      @students << {name: name, cohort: cohort, country: country}
 end
+puts "students loaded"
 end
 
 def save_students
   #open the file for writing
-  file = File.open(set_filename, "w") do |file|
+  CSV.open(set_filename, "w") do |csv|
   #iterate over the array of students
   @students.each do |student|
-    student_data = [student[:name], student[:cohort]]
-    csv_line = student_data.join(",")
-    file.puts csv_line
+    csv << [student[:name], student[:cohort], student[:country]]
   end
   puts "students saved!"
 end
