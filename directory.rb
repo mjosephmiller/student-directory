@@ -19,26 +19,26 @@ def set_filename
 end
 
 def load_students(filename = set_filename)
-  file = File.open(filename, "r")
+  file = File.open(filename, "r") do |file|
     file.readlines.each do |line|
       name, cohort = line.chomp.split(',')
       @students << {name: name, cohort: cohort}
     end
-    file.close
     puts "students loaded"
+end
 end
 
 def save_students
   #open the file for writing
-  file = File.open(set_filename, "w")
+  file = File.open(set_filename, "w") do |file|
   #iterate over the array of students
   @students.each do |student|
     student_data = [student[:name], student[:cohort]]
     csv_line = student_data.join(",")
     file.puts csv_line
   end
-  file.close
   puts "students saved!"
+end
 end
 
 def print_menu
